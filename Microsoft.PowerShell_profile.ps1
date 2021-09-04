@@ -1,6 +1,11 @@
 Import-Module -Name Terminal-Icons
 
-oh-my-posh --init --shell pwsh --config E:/ohmyposhv3-2.json | Invoke-Expression
+if ($host.Name -eq 'ConsoleHost')
+{
+    Import-Module PSReadLine
+}
+
+oh-my-posh --init --shell pwsh --config 'E:\Documents\PowerShell\ohmyposh.json' | Invoke-Expression
 
 # PowerShell parameter completion shim for the dotnet CLI
 Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
@@ -13,6 +18,7 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 # Git parameter completion
 Import-Module posh-git
 
+# Replace git cmt with git commit
 Set-PSReadLineOption -CommandValidationHandler {
     param([CommandAst]$CommandAst)
 
@@ -30,3 +36,8 @@ Set-PSReadLineOption -CommandValidationHandler {
         }
     }
 }
+
+# Predicitive Intellisense
+Set-PSReadLineOption -PredictionSource History
+Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineOption -EditMode Windows
